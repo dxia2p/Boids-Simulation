@@ -1,11 +1,15 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <cstdlib>
+#include <ctime>
 
 #include "boids.h"
 
 struct Boid{
-    int x;
-    int y;
+    float x;
+    float y;
+    float velX;
+    float velY;
 };
 
 static struct Boid* boidsArray;   
@@ -15,7 +19,13 @@ static SDL_Texture* boidTexture;
 
 static SDL_Rect srcR, destR;
 
-void initBoids(int size, SDL_Renderer* rend){
+static int visionRadius = 50;
+
+static const int BOID_VELOCITY = 20;
+
+void initBoids(int size, int perceptionRadius, int maxSpeed, int separationDistance, SDL_Renderer* rend){
+    srand(time(0));
+
     boidsArray = malloc(size * sizeof(struct Boid));
     boidsArraySize = size;
     renderer = rend;
@@ -26,6 +36,9 @@ void initBoids(int size, SDL_Renderer* rend){
     for(int i = 0; i < size; i++){
         boidsArray[i].x = 0;
         boidsArray[i].y = 0;
+        double randomAngle = ((double)rand() / RAND_MAX) * 2 * M_PI;
+        boidsArray[i].velX = cos(randomAngle) * BOID_VELOCITY;
+        boidsArray[i].velY = sin(randomAngle) * BOID_VELOCITY;
     }
 
     SDL_Surface* tmpBoidsSurface = IMG_Load("assets/Bird.png");
