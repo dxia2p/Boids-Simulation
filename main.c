@@ -7,11 +7,7 @@
 SDL_Window* window;
 static SDL_Renderer* renderer;
 
-SDL_Rect srcR, destR;
-
 int isRunning = 0;
-
-int cnt = 0; // This is temporary!!! I am using it to see if the game loop works.
 
 int initSDL(){
     if(SDL_Init(SDL_INIT_EVERYTHING) == 0){
@@ -51,11 +47,7 @@ void handleEvents(){
 }
 
 void update(){
-    cnt++;
-    destR.h = 32;
-    destR.w = 32;
-    destR.x = cnt;
-    printf("%d\n", cnt);
+    updateAllBoids();
 }
 
 void render(){
@@ -82,7 +74,7 @@ int main(int argc, char* argv[]){
         return 1;
     }
 
-    initBoids(30, renderer);
+    initBoids(40, renderer);
 
     // Limit FPS
     const int FPS = 60;
